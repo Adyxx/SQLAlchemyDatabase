@@ -43,10 +43,90 @@ class Database:
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
 
+    def read_all(self, order = Animal.name):
+        try:
+            result = self.session.query(Animal).order_by(order).all()
+            return result
+        except:
+            return False
+
+    def read_by_id(self, id):
+        try:
+            result = self.session.query(Animal).get(id)
+            return result
+        except:
+            return False
+    
+    def read_by_type(self, typee='savci'):
+        try:
+            result = self.session.query(Animal).join(Type).filter(Type.full_name.like(f'%{typee}%')).order_by(Animal.name).all()
+            return result
+        except:
+            return False
+    
+    def read_types(self):
+        try:
+            result = self.session.query(Type).all()
+            return result
+        except:
+            return False
+    
+    def create(self, animal):
+        try:
+            self.session.add(animal)
+            self.session.commit()
+            return True
+        except:
+            return False
+
+    def update(self):
+        try:
+            self.session.commit()
+            return True
+        except:
+            return False
+    
+    def delete(self, id):
+        try:
+            animal = self.read_by_id(id)
+            self.session.delete(animal)
+            self.session.commit()
+            return True
+        except:
+            return False
+
 db = Database(dbtype='sqlite', dbname='animals.db')
-animals = db.session.query(Animal).all()
+
+#animalc = Animal()
+#animalc.name = 'Liška polární'
+#animalc.type_fkey = 1
+#db.create(animalc)
+
+animals = db.read_all()
 for animal in animals:
-    print(f'{animal.name} [{animal.type.id}]')
-types = db.session.query(Type).all()
-for typee in types:
-    print(f'{typee.full_name} {typee.animals}')
+    print(f'{animal.name} [{animal.type.full_name}]')
+
+print('_____________')
+
+if db.read_by_id(2):
+    animall = db.read_by_id(2)
+    animall.name = 'Želva nádherná'
+    animall.type_fkey = 4
+    db.update()
+    
+
+types = db.read_types()
+for typeee in types:
+    print(f'{typeee.full_name}')
+
+print('_____________')
+
+db.delete(2)
+
+animals = db.read_all()
+for animal in animals:
+    print(f'{animal.name} [{animal.type.full_name}]')
+
+print('_____________')
+
+
