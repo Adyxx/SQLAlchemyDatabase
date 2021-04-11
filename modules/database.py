@@ -3,6 +3,7 @@ from sqlalchemy.types import String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
+
 SQLITE = 'sqlite'
 MYSQL = 'mysql'
 
@@ -21,7 +22,15 @@ class Animal(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(length=50))
-    type_fkey = Column(Integer, ForeignKey('types.id'))
+    typee = Column(Integer, ForeignKey('types.id'))
+
+class Info(Base):
+    __tablename__ = 'infos'
+
+    id = Column(Integer, primary_key=True)
+    text = Column(String(length=200))
+    info = Column(Integer, ForeignKey('types.id'))
+
 
 class Database:
     DB_ENGINE = {
@@ -50,9 +59,23 @@ class Database:
         except:
             return False
 
-    def read_by_id(self, id):
+    def read_animal_by_id(self, id):
         try:
             result = self.session.query(Animal).get(id)
+            return result
+        except:
+            return False
+    
+    def read_type_by_id(self, typee):
+        try:
+            result = self.session.query(Typee).get(id)
+            return result
+        except:
+            return False
+    
+    def read_info_by_id(self, info):
+        try:
+            result = self.session.query(Info).get(id)
             return result
         except:
             return False
@@ -71,14 +94,6 @@ class Database:
         except:
             return False
     
-    def create(self, animal):
-        try:
-            self.session.add(animal)
-            self.session.commit()
-            return True
-        except:
-            return False
-
     def update(self):
         try:
             self.session.commit()
@@ -86,47 +101,55 @@ class Database:
         except:
             return False
     
-    def delete(self, id):
+    def create_animal(self, animal):
         try:
-            animal = self.read_by_id(id)
+            self.session.add(animal)
+            self.session.commit()
+            return True
+        except:
+            return False
+    
+    def create_type(self, typee):
+        try:
+            self.session.add(typee)
+            self.session.commit()
+            return True
+        except:
+            return False
+    
+    def create_info(self, info):
+        try:
+            self.session.add(info)
+            self.session.commit()
+            return True
+        except:
+            return False
+  
+    def delete_animal(self, id):
+        try:
+            animal = self.read_animal_by_id(id)
             self.session.delete(animal)
             self.session.commit()
             return True
         except:
             return False
 
-db = Database(dbtype='sqlite', dbname='animals.db')
-
-#animalc = Animal()
-#animalc.name = 'Liška polární'
-#animalc.type_fkey = 1
-#db.create(animalc)
-
-animals = db.read_all()
-for animal in animals:
-    print(f'{animal.name} [{animal.type.full_name}]')
-
-print('_____________')
-
-if db.read_by_id(2):
-    animall = db.read_by_id(2)
-    animall.name = 'Želva nádherná'
-    animall.type_fkey = 4
-    db.update()
+    def delete_type(self, id):
+        try:
+            typee = self.read_type_by_id(id)
+            self.session.delete(typee)
+            self.session.commit()
+            return True
+        except:
+            return False
     
-
-types = db.read_types()
-for typeee in types:
-    print(f'{typeee.full_name}')
-
-print('_____________')
-
-db.delete(2)
-
-animals = db.read_all()
-for animal in animals:
-    print(f'{animal.name} [{animal.type.full_name}]')
-
-print('_____________')
+    def delete_info(self, id):
+        try:
+            info = self.read_info_by_id(id)
+            self.session.delete(info)
+            self.session.commit()
+            return True
+        except:
+            return False
 
 
