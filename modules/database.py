@@ -29,7 +29,7 @@ class Photo(Base):
     id = Column(Integer, primary_key=True)
     source = Column(String(150), unique=True, nullable=False)
     title = Column(String(length=100))
-    photo = Column(Integer, ForeignKey('animals.id'))
+    animal = Column(Integer, ForeignKey('animals.id'))
 
 
 class Database:
