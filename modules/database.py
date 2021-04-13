@@ -9,28 +9,27 @@ MYSQL = 'mysql'
 
 Base = declarative_base()
 
-class Type(Base):
-    __tablename__ = 'types'
-
-    id = Column(Integer, primary_key=True)
-    full_name = Column(String(length=50))
-    animals = relationship('Animal', backref='type')
-    photos = relationship('Photo', backref='type')
-
-
 class Animal(Base):
     __tablename__ = 'animals'
     id = Column(Integer, primary_key=True)
     name = Column(String(length=50))
     info = Column(String(length=200))
     typee = Column(Integer, ForeignKey('types.id'))
+    photos = relationship('Photo', backref='animal')
+
+class Type(Base):
+    __tablename__ = 'types'
+
+    id = Column(Integer, primary_key=True)
+    full_name = Column(String(length=50))
+    animals = relationship('Animal', backref='type')
 
 class Photo(Base):
     __tablename__ = 'photos'
     id = Column(Integer, primary_key=True)
     source = Column(String(150), unique=True, nullable=False)
     title = Column(String(length=100))
-    photo = Column(Integer, ForeignKey('types.id'))
+    photo = Column(Integer, ForeignKey('animals.id'))
 
 
 class Database:
