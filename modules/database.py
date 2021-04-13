@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Column, ForeignKey
-from sqlalchemy.types import String, Integer
+from sqlalchemy.types import String, Integer, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
@@ -15,21 +15,22 @@ class Type(Base):
     id = Column(Integer, primary_key=True)
     full_name = Column(String(length=50))
     animals = relationship('Animal', backref='type')
+    photos = relationship('Photo', backref='type')
 
 
 class Animal(Base):
     __tablename__ = 'animals'
-
     id = Column(Integer, primary_key=True)
     name = Column(String(length=50))
+    info = Column(String(length=200))
     typee = Column(Integer, ForeignKey('types.id'))
 
-class Info(Base):
-    __tablename__ = 'infos'
-
+class Photo(Base):
+    __tablename__ = 'photos'
     id = Column(Integer, primary_key=True)
-    text = Column(String(length=200))
-    info = Column(Integer, ForeignKey('types.id'))
+    source = Column(String(150), unique=True, nullable=False)
+    title = Column(String(length=100))
+    photo = Column(Integer, ForeignKey('types.id'))
 
 
 class Database:
@@ -73,9 +74,9 @@ class Database:
         except:
             return False
     
-    def read_info_by_id(self, info):
+    def read_photo_by_id(self, photo):
         try:
-            result = self.session.query(Info).get(id)
+            result = self.session.query(Photo).get(id)
             return result
         except:
             return False
@@ -117,9 +118,9 @@ class Database:
         except:
             return False
     
-    def create_info(self, info):
+    def create_photo(self, photo):
         try:
-            self.session.add(info)
+            self.session.add(photo)
             self.session.commit()
             return True
         except:
@@ -143,10 +144,10 @@ class Database:
         except:
             return False
     
-    def delete_info(self, id):
+    def delete_photo(self, photo):
         try:
-            info = self.read_info_by_id(id)
-            self.session.delete(info)
+            photo = self.read_photo_by_id(id)
+            self.session.delete(photo)
             self.session.commit()
             return True
         except:
