@@ -13,9 +13,9 @@ class Animal(Base):
     __tablename__ = 'animals'
     id = Column(Integer, primary_key=True)
     name = Column(String(length=50))
-    info = Column(String(length=200))
-    typee = Column(Integer, ForeignKey('types.id'))
-    photos = relationship('Photo', backref='animal')
+    #info = Column(String(length=200))
+    typee = Column(String(length=50), ForeignKey('types.id'))
+    photoo = relationship('Photo', backref='animal')
 
 class Type(Base):
     __tablename__ = 'types'
@@ -29,7 +29,7 @@ class Photo(Base):
     id = Column(Integer, primary_key=True)
     source = Column(String(150), unique=True, nullable=False)
     title = Column(String(length=100))
-    animal = Column(Integer, ForeignKey('animals.id'))
+    animall = Column(Integer, ForeignKey('animals.id'))
 
 
 class Database:
@@ -58,7 +58,7 @@ class Database:
             return result
         except:
             return False
-
+    
     def read_animal_by_id(self, id):
         try:
             result = self.session.query(Animal).get(id)

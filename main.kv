@@ -1,0 +1,49 @@
+BoxLayout:
+    orientation:'vertical'
+
+    MDToolbar:
+        title: 'Database of animals'
+        md_bg_color: 0, 0, 0, 1
+        specific_text_color: 1, 1, 1, 1
+
+    MDBottomNavigation:
+        id: navigation
+        panel_color: 0, 0, 0, 1
+
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Database'
+            icon: 'gitlab'
+            elevation_normal: 8
+
+            DatabaseScreen:
+
+<AnimalContent>:
+    orientation: 'vertical'
+    size_hint_x: 1
+    size_hint_y: None
+    height: "58dp"
+
+    MDTextField:
+        id: animal_name
+        text: 'Animal name'
+        pos_hint: {'center_x': .5, 'center_y': .9}
+
+    MDDropDownItem:
+        id: type_item
+        pos_hint: {'center_x': .5, 'center_y': 0}
+        size_hint_x: 1
+        text: 'Type'
+        on_release: self.parent.menu_types.open()
+
+<TypeContent>:
+    orientation: 'vertical'
+    size_hint_x: 1
+    size_hint_y: None
+    height: "40dp"
+
+    MDTextField:
+        id: type_full_name
+        text: 'Enter text here'
+        pos_hint: {'center_x': .5, 'center_y': .5}
+
