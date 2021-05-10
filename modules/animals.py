@@ -47,7 +47,7 @@ class AnimalContent(BoxLayout):
         if id:
             animal = vars(app.animals.database.read_animal_by_id(id))
         else:
-            animal = {"id":"", "name":"", "type": "Type"}
+            animal = {"id":"", "name":"", "typee": "Type"}
 
         self.ids.animal_name.text = animal['name']
 
@@ -62,8 +62,8 @@ class AnimalContent(BoxLayout):
             width_mult=5,
         )
 
-        self.ids.type_item.set_item(animal['type'])
-        self.ids.type_item.text = animal['type']
+        self.ids.type_item.set_item(animal['typee'])
+        self.ids.type_item.text = animal['typee']
 
     def set_item(self, text_item):
        
